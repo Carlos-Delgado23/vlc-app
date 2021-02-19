@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { auth, createUserProfileDocument, addCollectinAndDocuments } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 
 import './App.css'
 
@@ -14,14 +14,12 @@ import { setCurrentUser } from './redux/user/userActions'
 import { selectCurrentUser } from './redux/user/userSelector'
 import { createStructuredSelector } from 'reselect'
 
-import { selectCollectionsForPreview } from './redux/shop/shopSelector'
-
 
 class App extends React.Component {
   unsubscribeFromAuth = null
 
   componentDidMount() {
-    const { setCurrentUser, collectionsArray } = this.props
+    const { setCurrentUser } = this.props
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
@@ -35,7 +33,6 @@ class App extends React.Component {
         })
       }
       setCurrentUser(userAuth)
-      addCollectinAndDocuments('collections', collectionsArray)
     })
   }
 
@@ -60,7 +57,6 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   setCurrentUser: selectCurrentUser,
-  collectionsArray: selectCollectionsForPreview
 })
 
 const mapDispatchToProps = dispatch => ({
